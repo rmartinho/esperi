@@ -1,0 +1,86 @@
+declare parameter orbit.
+
+set diameter to 600000.
+set space to 70000.
+set u to 3530.461.
+
+set countdown to 10.
+until countdown = 0 {
+    print "[COUNTDOWN] " + countdown.
+    wait 1.
+    set countdown to countdown-1.
+    if countdown = 1 {
+        print "[BURN] Ascent burn.".
+        stage.
+    }.
+}.
+
+lock steering to up + r(0,0,180).
+lock throttle to 1.
+print "[STATUS] Liftoff!".
+
+when stage:liquidfuel = 0 then {
+    print "[STAGE] Separating stage 1.".
+    lock throttle to 0.
+    stage.
+    wait 2.
+    print "[STAGE] Igniting stage 2.".
+    lock throttle to 1.
+    stage.
+}.
+
+when altitude > 10000 then {
+    print "[STATUS] Beginning gravity turn.".
+    lock steering to up + R(0,0,180) + R(0,-45,0).
+}.
+
+print "[THROTTLE] Throttling to 130m/s.".
+run throttletv(3000, 130).
+print "[THROTTLE] Throttling to 160m/s.".
+run throttletv(5000, 160).
+print "[THROTTLE] Throttling to 215m/s.".
+run throttletv(8000, 215).
+print "[THROTTLE] Throttling to 260m/s.".
+run throttletv(10000, 260).
+print "[THROTTLE] Throttling to 350m/s.".
+run throttletv(13000, 350).
+print "[THROTTLE] Throttling to 425m/s.".
+run throttletv(15000, 425).
+print "[THROTTLE] Throttling to 470m/s.".
+run throttletv(16000, 470).
+print "[THROTTLE] Unlimited throttle.".
+
+lock throttle to 1.
+wait until apoapsis > (orbit + 1000).
+print "[STATUS] Gravity turn complete.".
+lock throttle to 0.
+
+print "[STATUS] Waiting for circularisation burn.".
+lock steering to prograde.
+wait until eta:apoapsis < 10.
+
+lock sma to ((apoapsis + periapsis + diameter)*0.5)/1000.
+lock period to 6.283185307 * sqrt(sma*sma*sma/u).
+lock eccentricity to 1.0 - 2.0 / ((apoapsis+diameter)/(periapsis+diameter) + 1).
+
+print "[BURN] Circularising.".
+lock apo_deviation to abs(apoapsis - orbit)/orbit.
+lock throttle to 1.
+wait until periapsis > orbit or (periapsis > space and apo_deviation > 0.10).
+lock throttle to 0.
+
+print "[STATUS] Fine-tuning orbit.".
+if eta:apoapsis < eta:periapsis {
+    print "[STATUS] Adjusting periapsis.".
+    run fineperi(orbit, 0.05, 0.2).
+}.
+print "[STATUS] Adjusting apoapsis.".
+run fineapo(orbit, 0.05, 0.2).
+print "[STATUS] Adjusting periapsis.".
+run fineperi(orbit, 0.05, 0.2).
+
+print "[STATUS] Stable orbit @ " + apoapsis + "x" + periapsis + "; e=" + eccentricity + ", p=" + period.
+lock throttle to 0.
+print "[BURN] Engines cutoff.".
+unlock throttle.
+unlock steering.

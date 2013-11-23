@@ -1,0 +1,17 @@
+declare parameter h.
+declare parameter tv.
+
+set t to throttle.
+lock throttle to t.
+until altitude > h {
+    if verticalspeed - tv > 5 {
+        set t to throttle - 0.02.
+    }.
+    if verticalspeed - tv < -5 {
+        set t to throttle + 0.02.
+    }.
+    if t < 0 { set t to 0. }.
+    if t > 1 { set t to 1. }.
+    lock throttle to t.
+    wait 0.1.
+}.

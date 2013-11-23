@@ -1,0 +1,9 @@
+print "[LOAD] Main bella launch program".
+copy bellalaunch from 0.
+print "[LOAD] Atmospheric throttle program".
+copy throttletv from 0.
+print "[LOAD] Orbit fine-tuning program".
+copy fineapo from 0.
+copy fineperi from 0.
+
+run bellalaunch(100000).

@@ -1,0 +1,11 @@
+declare parameter countdown.
+
+until countdown = 0 {
+    print "[COUNTDOWN] " + countdown.
+    wait 1.
+    set countdown to countdown-1.
+    if countdown = 1 {
+        print "[BURN] Ascent burn.".
+        stage.
+    }.
+}.

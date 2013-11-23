@@ -1,0 +1,13 @@
+declare parameter orbit.
+declare parameter tolerance.
+declare parameter burn.
+
+lock apo_deviation to abs(apoapsis - orbit)/orbit.
+if apo_deviation > tolerance {
+    if apoapsis < orbit { lock steering to prograde. }.
+    if apoapsis >= orbit { lock steering to retrograde. }.
+    wait eta:periapsis.
+    lock throttle to burn.
+    wait until apo_deviation < tolerance.
+    lock throttle to 0.
+}.
