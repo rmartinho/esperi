@@ -6,7 +6,7 @@ lock peri_deviation to abs(periapsis - orbit)/orbit.
 if peri_deviation > tolerance {
     if periapsis < orbit { lock steering to prograde. }.
     if periapsis >= orbit { lock steering to retrograde. }.
-    wait eta:apoapsis.
+    wait until eta:apoapsis < 3.
     lock throttle to burn.
     wait until peri_deviation < tolerance.
     lock throttle to 0.
