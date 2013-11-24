@@ -9,14 +9,18 @@ until countdown = 0 {
     print "[COUNTDOWN] " + countdown.
     wait 1.
     set countdown to countdown-1.
+    if countdown = 2 {
+        lock steering to up + r(0,0,180).
+        lock throttle to 1.
+    }.
     if countdown = 1 {
         print "[BURN] Ascent burn.".
         stage.
     }.
 }.
 
-lock steering to up + r(0,0,180).
-lock throttle to 1.
+stage.
+wait until alt:radar > 100.
 print "[STATUS] Liftoff!".
 
 when stage:liquidfuel = 0 then {
@@ -32,6 +36,10 @@ when stage:liquidfuel = 0 then {
 when altitude > 10000 then {
     print "[STATUS] Beginning gravity turn.".
     lock steering to up + R(0,0,180) + R(0,-45,0).
+}.
+
+when altitude > 70000 then {
+    print "[STAGE] Decoupling payling fairing.".
 }.
 
 print "[THROTTLE] Throttling to 130m/s.".
