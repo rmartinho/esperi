@@ -1,4 +1,5 @@
-declare parameter orbit.
+declare parameter low_orbit.
+declare parameter high_orbit.
 
 set radius to 600000.
 set space to 70000.
@@ -28,7 +29,7 @@ when stage:liquidfuel = 0 then {
     print "[STAGE] Separating stage 1.".
     lock throttle to 0.
     stage.
-    wait 2.
+    wait 1.
     print "[STAGE] Igniting stage 2.".
     lock throttle to 1.
     stage.
@@ -42,17 +43,19 @@ when altitude > turnpoint then {
 when altitude > space then {
     print "[STAGE] Decoupling payload fairing.".
     stage.
-    wait 1.
+    wait 2.
+    print "[STAGE] Extending antennas.".
+    toggle ag2.
 }.
 
 run throttletv(10000).
 
 lock throttle to 1.
-wait until apoapsis > (orbit * 1.01).
+wait until apoapsis > (low_orbit * 1.01).
 print "[STATUS] Gravity turn complete.".
 lock throttle to 0.
 
-print "[STATUS] Waiting for circularisation burn.".
+print "[STATUS] Coasting to circularisation burn.".
 lock steering to prograde.
 wait until eta:apoapsis < 10.
 
@@ -60,23 +63,16 @@ lock sma to ((apoapsis + periapsis + radius)*0.5)/1000.
 lock period to 6.283185307 * sqrt(sma*sma*sma/u).
 lock eccentricity to 1.0 - 2.0 / ((apoapsis+radius)/(periapsis+radius) + 1).
 
-print "[BURN] Circularising.".
-lock apo_deviation to abs(apoapsis - orbit)/orbit.
+print "[BURN] Achieving stable orbit.".
+lock apo_deviation to abs(apoapsis - low_orbit)/low_orbit.
 lock throttle to 1.
-wait until periapsis > orbit or (periapsis > space and apo_deviation > 0.10).
+wait until periapsis > low_orbit or (periapsis > space and apo_deviation > 0.10).
 lock throttle to 0.
+print "[STATUS] Coasting to transfer burn.".
 
-print "[STATUS] Fine-tuning orbit.".
-if eta:apoapsis < eta:periapsis {
-    print "[STATUS] Adjusting periapsis.".
-    run fineperi(orbit, 0.05, 0.2).
-}.
-print "[STATUS] Adjusting apoapsis.".
-run fineapo(orbit, 0.05, 0.2).
-print "[STATUS] Adjusting periapsis.".
-run fineperi(orbit, 0.05, 0.2).
+run transfer(high_orbit).
 
-print "[STATUS] Stable orbit @ " + apoapsis + "x" + periapsis + "; e=" + eccentricity + ", p=" + period.
+print "[STATUS] High orbit @ " + apoapsis + "x" + periapsis + "; e=" + eccentricity + ", p=" + period.
 lock throttle to 0.
 print "[BURN] Engines cutoff.".
 unlock throttle.

@@ -1,0 +1,9 @@
+print "[BOOT] Loading Cassie launch sequence program.".
+copy cassielaunch from 0.
+print "[BOOT] Loading atmospheric throttle program.".
+copy throttletv from 0.
+print "[BOOT] Loading orbital transfer program.".
+copy transfer from 0.
+print "[BOOT] Cassie software operational.".
+
+run cassielaunch(100000, 1000000).

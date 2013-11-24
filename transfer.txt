@@ -1,0 +1,14 @@
+declare parameter target_orbit.
+
+lock steering to prograde.
+wait until eta:periapsis < 3.
+print "[BURN] Transferring to orbit at " + target_orbit + ".".
+lock throttle to 1.
+wait until apoapsis > target_orbit.
+lock throttle to 0.
+
+wait until eta:apoapsis < 3.
+print "[BURN] Adjusting periapsis.".
+lock throttle to 1.
+wait until periapsis > target_orbit.
+lock throttle to 0.

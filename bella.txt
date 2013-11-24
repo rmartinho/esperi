@@ -5,6 +5,6 @@ copy throttletv from 0.
 print "[BOOT] Loading orbit fine-tuning program.".
 copy fineapo from 0.
 copy fineperi from 0.
-print "[BOOT] Bella 12 software operational.".
+print "[BOOT] Bella software operational.".
 
 run bellalaunch(100000).
