@@ -1,17 +1,23 @@
 declare parameter h.
-declare parameter tv.
 
 set t to throttle.
 lock throttle to t.
+lock radius to altitude + 600000.
+set g to 6.674 * (10^-11).
+set m to 5.2915793 * (10^22).
+lock p to 1.2230948554874 * (2.718 ^ (altitude/-5000)).
+lock tv to sqrt(1250 * g * m/(radius*radius*p)).
 until altitude > h {
-    if verticalspeed - tv > 5 {
-        set t to throttle - 0.02.
+    print "Terminal velocity: " + tv.
+    if verticalspeed - tv > 1 {
+        set t to throttle - 0.02 * (verticalspeed - tv).
     }.
     if verticalspeed - tv < -5 {
-        set t to throttle + 0.02.
+        set t to throttle - 0.02  * (verticalspeed - tv).
     }.
     if t < 0 { set t to 0. }.
     if t > 1 { set t to 1. }.
     lock throttle to t.
     wait 0.1.
 }.
+lock throttle to 1.

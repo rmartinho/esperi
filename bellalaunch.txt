@@ -42,21 +42,7 @@ when altitude > 70000 then {
     print "[STAGE] Decoupling payling fairing.".
 }.
 
-print "[THROTTLE] Throttling to 130m/s.".
-run throttletv(3000, 130).
-print "[THROTTLE] Throttling to 160m/s.".
-run throttletv(5000, 160).
-print "[THROTTLE] Throttling to 215m/s.".
-run throttletv(8000, 215).
-print "[THROTTLE] Throttling to 260m/s.".
-run throttletv(10000, 260).
-print "[THROTTLE] Throttling to 350m/s.".
-run throttletv(13000, 350).
-print "[THROTTLE] Throttling to 425m/s.".
-run throttletv(15000, 425).
-print "[THROTTLE] Throttling to 470m/s.".
-run throttletv(16000, 470).
-print "[THROTTLE] Unlimited throttle.".
+run throttletv(10000).
 
 lock throttle to 1.
 wait until apoapsis > (orbit + 1000).
