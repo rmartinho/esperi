@@ -8,7 +8,6 @@ set m to 5.2915793 * (10^22).
 lock p to 1.2230948554874 * (2.718 ^ (altitude/-5000)).
 lock tv to sqrt(1250 * g * m/(radius*radius*p)).
 until altitude > h {
-    print "Terminal velocity: " + tv.
     if abs(verticalspeed - tv) > 1 {
         set t to throttle - 0.02 * (verticalspeed - tv).
     }.
