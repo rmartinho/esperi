@@ -39,7 +39,8 @@ when altitude > 10000 then {
 }.
 
 when altitude > 70000 then {
-    print "[STAGE] Decoupling payling fairing.".
+    print "[STAGE] Decoupling payload fairing.".
+    stage.
 }.
 
 run throttletv(10000).
