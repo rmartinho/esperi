@@ -1,9 +1,10 @@
-print "[LOAD] Main bella launch program".
+print "[BOOT] Loading Bella launch sequence program.".
 copy bellalaunch from 0.
-print "[LOAD] Atmospheric throttle program".
+print "[BOOT] Loading atmospheric throttle program.".
 copy throttletv from 0.
-print "[LOAD] Orbit fine-tuning program".
+print "[BOOT] Loading orbit fine-tuning program.".
 copy fineapo from 0.
 copy fineperi from 0.
+print "[BOOT] Bella 12 software operational.".
 
 run bellalaunch(100000).
