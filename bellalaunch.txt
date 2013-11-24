@@ -47,7 +47,7 @@ when altitude > space then {
 run throttletv(10000).
 
 lock throttle to 1.
-wait until apoapsis > (orbit * 0.01).
+wait until apoapsis > (orbit * 1.01).
 print "[STATUS] Gravity turn complete.".
 lock throttle to 0.
 
