@@ -1,7 +1,8 @@
 declare parameter orbit.
 
-set diameter to 600000.
+set radius to 600000.
 set space to 70000.
+set turnpoint to 10000.
 set u to 3530.461.
 
 set countdown to 10.
@@ -33,12 +34,12 @@ when stage:liquidfuel = 0 then {
     stage.
 }.
 
-when altitude > 10000 then {
+when altitude > turnpoint then {
     print "[STATUS] Beginning gravity turn.".
     lock steering to up + R(0,0,180) + R(0,-45,0).
 }.
 
-when altitude > 70000 then {
+when altitude > space then {
     print "[STAGE] Decoupling payload fairing.".
     stage.
 }.
@@ -46,7 +47,7 @@ when altitude > 70000 then {
 run throttletv(10000).
 
 lock throttle to 1.
-wait until apoapsis > (orbit + 1000).
+wait until apoapsis > (orbit * 0.01).
 print "[STATUS] Gravity turn complete.".
 lock throttle to 0.
 
@@ -54,9 +55,9 @@ print "[STATUS] Waiting for circularisation burn.".
 lock steering to prograde.
 wait until eta:apoapsis < 10.
 
-lock sma to ((apoapsis + periapsis + diameter)*0.5)/1000.
+lock sma to ((apoapsis + periapsis + radius)*0.5)/1000.
 lock period to 6.283185307 * sqrt(sma*sma*sma/u).
-lock eccentricity to 1.0 - 2.0 / ((apoapsis+diameter)/(periapsis+diameter) + 1).
+lock eccentricity to 1.0 - 2.0 / ((apoapsis+radius)/(periapsis+radius) + 1).
 
 print "[BURN] Circularising.".
 lock apo_deviation to abs(apoapsis - orbit)/orbit.
